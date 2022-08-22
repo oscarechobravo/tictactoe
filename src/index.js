@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 
-class Square extends React.Component {
+/*class Square extends React.Component {
 
     constructor(props){
         super(props);
@@ -14,16 +14,50 @@ class Square extends React.Component {
     render() {
         return (
 
-            <button className="square" onClick={() => this.setState({value: 'X'})}>
-                {this.state.value}
+            <button
+                className="square"
+                onClick={() => this.props.onClick()}
+            >
+                {this.props.value}
             </button>
         );
     }
+}*/
+// replace square class/object with function as we are only rendering a component. takes props (property) as input
+function Square(props) {
+    return (
+        <button
+            className="square"
+            onClick={props.onClick}
+        >
+            {props.value}
+        </button>
+    )
 }
 
 class Board extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+          squares: Array(9).fill(null),
+        };
+    }
+    handleClick(i) {
+        //.slice() create a copy
+        const squares = this.state.squares.slice();
+        squares[i] = 'X';
+        //replace squares with the updated copy using setter method
+        this.setState({squares: squares});
+    }
+
     renderSquare(i) {
-        return <Square value={i} />;
+        return (
+            <Square
+                value={this.state.squares[i]}
+                //set the onClick prop to method in Board, then pass the i of the tile
+                onClick={()=> this.handleClick(i)}
+            />
+        );
     }
 
     render() {
